@@ -19,19 +19,6 @@ two = 0;
 # Number of the glut window.
 window = 0
 
-
-#img = Image.open('images.jpeg') # .jpg, .bmp, etc. also work
-#img_data = numpy.array(list(img.getdata()), numpy.int8)
-#texture = glGenTextures(1)
-#glPixelStorei(GL_UNPACK_ALIGNMENT,1)
-#glBindTexture(GL_TEXTURE_2D, texture)
-#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
-#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
-#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-#glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.size[0], img.size[1], 0, GL_RGB, GL_UNSIGNED_BYTE, img_data)
-
-
 # A general OpenGL initialization function.  Sets all of the initial parameters. 
 def InitGL(Width, Height):				# We call this right after our OpenGL window is created.
     glClearColor(0.0, 0.0, 0.0, 0.0)	# This Will Clear The Background Color To Black
@@ -55,7 +42,6 @@ def DrawGLScene():
 	global two;
 	
 	serial_poll()
-	print "Drqwing"
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	# Clear The Screen And The Depth Buffer
 	glLoadIdentity();					# Reset The View
@@ -111,8 +97,8 @@ def serial_poll():
 			oney = float(val[0])
 			#two is y axis
 			two  = float(val[3]) 
-			two = 0
-			oney = two
+			#two = 0
+			#oney = two
 		
 		#DrawGLScene()
 	
@@ -133,8 +119,8 @@ def main():
 	#  Double buffer 
 	#  RGBA color
 	# Alpha components supported 
-	# Depth buffer
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
+	# Depth buffer GLUT_DOUBLE
+	glutInitDisplayMode(GLUT_RGBA| GLUT_ALPHA | GLUT_DEPTH)
 	
 	# get a 640 x 480 window 
 	glutInitWindowSize(800, 600)

@@ -12,6 +12,9 @@
 
 const uint8_t LED_PIN = 13;
 
+#define MPU_6050_ADDR (0x68)
+#define MAG_ADDR (0x1E)
+
 
 typedef struct mpu_6050_loc_t{
 	uint8_t mpuIntStatus;
@@ -24,7 +27,7 @@ typedef struct mpu_6050_loc_t{
 	boolean dmpReady;
 }mpu_6050_loc_t;
 mpu_6050_loc_t  mpu_6050_data;
-MPU6050 mpu(0x68);
+MPU6050 mpu(MPU_6050_ADDR);
 HMC5883L mag;
 
 typedef struct sensor_data_t {
@@ -117,6 +120,7 @@ static uint32_t setup_sensors () {
 		// a device did acknowledge to the address.
 		Wire.beginTransmission(address);
 		error = Wire.endTransmission();
+		delayMicroseconds(10000);
 
 		if (error == 0) {
 			Serial.print("I2C device found at address 0x");
@@ -176,9 +180,7 @@ static msg_t thSensors(void *arg) {
     
     //calculate heading
     sense.mh = atan2(sense.my, sense.mx);
-    //if(sense.mh < 0) 
-		//sense.mh += 2 * M_PI;
-		
+
 	mpu_6050_data.mpuIntStatus = mpu.getIntStatus();
     mpu_6050_data.fifoCount = mpu.getFIFOCount();
     	
@@ -242,25 +244,6 @@ void mainThread() {
   chThdCreateStatic(waSensors, sizeof(waSensors),
                           NORMALPRIO + 2, thSensors, NULL);
 
-  //// start print thread
-  //chThdCreateStatic(waThread2, sizeof(waThread2),
-                          //NORMALPRIO + 1, Thread2, NULL);
-
-  //// start print thread
-  //chThdCreateStatic(waThread3, sizeof(waThread3),
-                          //NORMALPRIO + 3, Thread3, NULL);                          
-
-  //// start print thread
-  //chThdCreateStatic(waThread3, sizeof(waThread4),
-                          //NORMALPRIO + 4, Thread4, NULL);  
-  //// increment counter
-  //while (1) {
-    //// must insure increment is atomic in case of context switch for print
-    //// should use mutex for longer critical sections
-    //noInterrupts();
-    //count++;
-    //interrupts();
-  //}
 }
 //------------------------------------------------------------------------------
 void loop() {
